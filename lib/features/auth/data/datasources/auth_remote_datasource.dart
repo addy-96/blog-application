@@ -1,15 +1,16 @@
 import 'package:blog_app/core/errors/server_exception.dart';
+import 'package:blog_app/features/auth/data/models/user_model.dart';
 import 'package:blog_app/features/auth/data/repository/firestore_auth_repoository_impl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class AuthRemoteDatasource {
-  Future<String> signUpWithEmailPassword({
+  Future<UserModel> signUpWithEmailPassword({
     required String name,
     required String email,
     required String password,
   });
 
-  Future<String> logInWithEmailPassword({
+  Future<UserModel> logInWithEmailPassword({
     required String email,
     required String password,
   });
@@ -24,7 +25,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
   });
 
   @override
-  Future<String> logInWithEmailPassword(
+  Future<UserModel> logInWithEmailPassword(
       {required String email, required String password}) async {
     try {
       final response = await firebaseAuthClient.signInWithEmailAndPassword(
@@ -33,14 +34,29 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
         throw const ServerException(message: 'User is null');
       }
 
-      return response.user!.uid;
+      final result = await firestoreAuthRepoositoryImpl.getUserData(
+        userID: response.user!.uid,
+      );
+
+      return result.fold(
+        (l) {
+          throw const ServerException(message: 'Some error Occured');
+        },
+        (r) {
+          return UserModel(
+            id: r.id,
+            email: r.email,
+            name: r.name,
+          );
+        },
+      );
     } on ServerException catch (e) {
       throw ServerException(message: e.toString());
     }
   }
 
   @override
-  Future<String> signUpWithEmailPassword({
+  Future<UserModel> signUpWithEmailPassword({
     required String name,
     required String email,
     required String password,
@@ -64,7 +80,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
           userId: response.user!.uid,
         );
       }
-      return response.user!.uid;
+
+      final userModel = UserModel(
+        id: response.user!.uid,
+        email: email,
+        name: name,
+      );
+      return userModel;
     } catch (e) {
       throw ServerException(message: e.toString());
     }

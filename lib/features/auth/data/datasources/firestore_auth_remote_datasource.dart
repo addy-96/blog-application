@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:blog_app/features/auth/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract interface class FirestoreAuthRemoteDatasource {
@@ -6,6 +9,9 @@ abstract interface class FirestoreAuthRemoteDatasource {
     required String userId,
   });
 
+  Future<UserModel> getUserData({
+    required String userID,
+  });
 }
 
 class FirestoreeAuthRemoteDtaSourceImpl
@@ -24,5 +30,23 @@ class FirestoreeAuthRemoteDtaSourceImpl
       'userId': userId,
       'createdAt': FieldValue.serverTimestamp(),
     });
+  }
+
+  @override
+  Future<UserModel> getUserData({required String userID}) async {
+    final response = await firestore.collection('users').doc(userID).get();
+
+    log(
+      response.data()!['username'].toString(),
+    );
+
+    final username = response.data()!['username'];
+    final userEmail = response.data()!['userEmail'];
+
+    return UserModel(
+      id: userID,
+      email: userEmail,
+      name: username,
+    );
   }
 }

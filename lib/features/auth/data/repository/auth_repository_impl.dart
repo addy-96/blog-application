@@ -2,6 +2,8 @@ import 'package:blog_app/core/errors/failure.dart';
 import 'package:blog_app/core/errors/server_exception.dart';
 import 'package:blog_app/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog_app/features/auth/data/datasources/firestore_auth_remote_datasource.dart';
+import 'package:blog_app/features/auth/data/models/user_model.dart';
+import 'package:blog_app/features/auth/domain/entities/user.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -15,8 +17,10 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<Either<Failure, String>> logInWithEmailPassword(
-      {required String email, required String password}) async {
+  Future<Either<Failure, User>> logInWithEmailPassword({
+    required String email,
+    required String password,
+  }) async {
     try {
       final userId = await authRemoteDatasource.logInWithEmailPassword(
         email: email,
@@ -34,18 +38,18 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, String>> signUpWithEmailPassword(
+  Future<Either<Failure, User>> signUpWithEmailPassword(
       {required String name,
       required String email,
       required String password}) async {
     try {
-      final userId = await authRemoteDatasource.signUpWithEmailPassword(
+      final userModel = await authRemoteDatasource.signUpWithEmailPassword(
         name: name,
         email: email,
         password: password,
       );
 
-      return right(userId);
+      return right(userModel);
     } on ServerException catch (e) {
       return left(
         Failure(
