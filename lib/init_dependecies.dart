@@ -26,6 +26,7 @@ serviceLocator<AuthBloc>();
 and thats how dependecyinjection works
 */
 
+import 'package:blog_app/core/common/cubits/auth_cubit/auth_current_user_cubit.dart';
 import 'package:blog_app/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog_app/features/auth/data/datasources/firestore_auth_remote_datasource.dart';
 import 'package:blog_app/features/auth/data/repository/auth_repository_impl.dart';
@@ -57,6 +58,9 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton(
     () => FirebaseFirestore.instance,
   );
+
+  //core
+  serviceLocator.registerLazySingleton(() => AuthCurrentUserCubit());
 }
 
 void _authInit() {
@@ -91,7 +95,7 @@ void _authInit() {
       userSignUp: serviceLocator(),
       userLogin: UserLogin(
         authRepository: serviceLocator(),
-      ),
+      ), authCurrentUserCubit: serviceLocator(),
     ),
   );
 

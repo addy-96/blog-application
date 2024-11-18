@@ -1,7 +1,7 @@
 import 'package:blog_app/core/errors/failure.dart';
 import 'package:blog_app/core/errors/server_exception.dart';
 import 'package:blog_app/features/auth/data/datasources/firestore_auth_remote_datasource.dart';
-import 'package:blog_app/features/auth/domain/entities/user.dart';
+import 'package:blog_app/core/entities/user.dart';
 import 'package:blog_app/features/auth/domain/repository/firestore_auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 

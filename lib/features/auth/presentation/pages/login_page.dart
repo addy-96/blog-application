@@ -7,6 +7,7 @@ import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:blog_app/features/auth/presentation/widgets/custom_button.dart';
 import 'package:blog_app/features/auth/presentation/widgets/custom_textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -71,11 +72,22 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Log In',
-                        style: _text.normalText(
-                          32,
-                          ColorPallets.light,
+                      GestureDetector(
+                        onTap: () {
+                          final user = FirebaseAuth.instance.currentUser;
+
+                          if (user == null) {
+                            print('no logged in');
+                          } else if (user != null) {
+                            print('${user.uid} logged in........');
+                          }
+                        },
+                        child: Text(
+                          'Log In',
+                          style: _text.normalText(
+                            32,
+                            ColorPallets.light,
+                          ),
                         ),
                       ),
                       const Gap(15),

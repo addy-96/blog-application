@@ -4,6 +4,7 @@ import 'package:blog_app/features/auth/data/repository/firestore_auth_repoositor
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class AuthRemoteDatasource {
+  
   Future<UserModel> signUpWithEmailPassword({
     required String name,
     required String email,

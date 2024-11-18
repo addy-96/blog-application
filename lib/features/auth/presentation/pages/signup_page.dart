@@ -1,5 +1,3 @@
-//Todo: to add firebase cloud for storing user data after signUp
-
 import 'package:blog_app/core/color_pallets.dart';
 import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/routes.dart';
