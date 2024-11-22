@@ -4,6 +4,8 @@ import 'package:blog_app/core/common/cubits/auth_cubit/auth_current_user_cubit.d
 import 'package:blog_app/core/common/cubits/blog_image_cubit/cubit/blog_image_cubit.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/login_page.dart';
+import 'package:blog_app/features/blog/presentation/bloc/fetch_blog_bloc/fetch_blog_bloc.dart';
+import 'package:blog_app/features/blog/presentation/bloc/upload_blog_bloc/upload_blog_bloc.dart';
 import 'package:blog_app/features/blog/presentation/pages/blog_page.dart';
 import 'package:blog_app/init_dependecies.dart';
 import 'package:device_preview/device_preview.dart';
@@ -25,7 +27,13 @@ void main() async {
             create: (_) => serviceLocator<AuthCurrentUserCubit>(),
           ),
           BlocProvider(
+            create: (_) => serviceLocator<FetchBlogBloc>(),
+          ),
+          BlocProvider(
             create: (_) => BlogImageCubit(),
+          ),
+          BlocProvider(
+            create: (_) => serviceLocator<BlogBloc>(),
           ),
         ],
         child: const MyApp(),

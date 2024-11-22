@@ -79,7 +79,6 @@ class _LoginPageState extends State<LoginPage> {
                           if (user == null) {
                             print('no logged in');
                           } else if (user != null) {
-                            print('${user.uid} logged in........');
                           }
                         },
                         child: Text(

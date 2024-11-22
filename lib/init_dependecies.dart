@@ -35,10 +35,18 @@ import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_login.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog_app/features/blog/data/datsources/blog_remote_data_source.dart';
+import 'package:blog_app/features/blog/data/repositories/blog_repository_impl.dart';
+import 'package:blog_app/features/blog/domain/repositories/blog_reppsitory.dart';
+import 'package:blog_app/features/blog/domain/usecases/fetch_blog.dart';
+import 'package:blog_app/features/blog/domain/usecases/upload_blog.dart';
+import 'package:blog_app/features/blog/presentation/bloc/fetch_blog_bloc/fetch_blog_bloc.dart';
+import 'package:blog_app/features/blog/presentation/bloc/upload_blog_bloc/upload_blog_bloc.dart';
 import 'package:blog_app/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 
 final serviceLocator = GetIt.instance; //step 1 declare get_it inctance
@@ -46,6 +54,7 @@ final serviceLocator = GetIt.instance; //step 1 declare get_it inctance
 Future<void> initDependencies() async {
   // this func is called in main
   _authInit();
+  _initblog();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -59,8 +68,14 @@ Future<void> initDependencies() async {
     () => FirebaseFirestore.instance,
   );
 
+  serviceLocator.registerLazySingleton(
+    () => FirebaseStorage.instance,
+  );
+
   //core
-  serviceLocator.registerLazySingleton(() => AuthCurrentUserCubit());
+  serviceLocator.registerLazySingleton(
+    () => AuthCurrentUserCubit(),
+  );
 }
 
 void _authInit() {
@@ -95,7 +110,8 @@ void _authInit() {
       userSignUp: serviceLocator(),
       userLogin: UserLogin(
         authRepository: serviceLocator(),
-      ), authCurrentUserCubit: serviceLocator(),
+      ),
+      authCurrentUserCubit: serviceLocator(),
     ),
   );
 
@@ -108,6 +124,46 @@ void _authInit() {
   serviceLocator.registerFactory<FirestoreAuthRemoteDatasource>(
     () => FirestoreeAuthRemoteDtaSourceImpl(
       firestore: serviceLocator(),
+    ),
+  );
+}
+
+void _initblog() {
+  serviceLocator.registerFactory<BlogRemoteDataSource>(
+    () => BlogRemoteDataSourceImpl(
+      firestore: serviceLocator(),
+      fireStorage: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<BlogReppsitory>(
+    () => BlogRepositoryImpl(
+      blogRemoteDataSource: serviceLocator(),
+      auth: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => UploadBlog(
+      blogReppsitory: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => BlogBloc(
+      uploadBlog: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => FetchBlog(
+      blogReppsitory: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => FetchBlogBloc(
+      fetchBlog: serviceLocator(),
     ),
   );
 }

@@ -12,7 +12,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserSignUp
       _userSignUp; //here this field needs to be private thats why the extra methood in contructor
   final UserLogin _userLogin;
-
   final AuthCurrentUserCubit _authCurrentUserCubit;
   AuthBloc({
     required UserSignUp userSignUp,
