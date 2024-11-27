@@ -23,3 +23,5 @@ final class AuthFailure extends AuthState {
     required this.message,
   });
 }
+
+final class AuthUserLoggedOut extends AuthState{}

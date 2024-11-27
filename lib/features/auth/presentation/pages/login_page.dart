@@ -7,7 +7,6 @@ import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:blog_app/features/auth/presentation/widgets/custom_button.dart';
 import 'package:blog_app/features/auth/presentation/widgets/custom_textfield.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -59,36 +58,25 @@ class _LoginPageState extends State<LoginPage> {
             child: BlocConsumer<AuthBloc, AuthState>(
               listener: (context, state) {
                 if (state is AuthFailure) {
-                  showSnackbar(context, state.message);
+                  showSnackbar(
+                    context,
+                    state.message,
+                  );
                 }
               },
               builder: (context, state) {
                 if (state is AuthLoading) {
-                  return Loader(color: themeColor);
+                  return Loader(
+                    color: themeColor,
+                  );
                 }
-
                 return Form(
                   key: _formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          final user = FirebaseAuth.instance.currentUser;
-
-                          if (user == null) {
-                            print('no logged in');
-                          } else if (user != null) {
-                          }
-                        },
-                        child: Text(
-                          'Log In',
-                          style: _text.normalText(
-                            32,
-                            ColorPallets.light,
-                          ),
-                        ),
-                      ),
+                      Text('Log In',
+                          style: _text.normalText(32, ColorPallets.light)),
                       const Gap(15),
                       CustomTextfield(
                         textController: emailController,

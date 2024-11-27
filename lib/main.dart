@@ -1,10 +1,13 @@
 // The app follows features first approach eg. in features the first folder is auth and 3 sub folders data domain presentaion and again the presentaion has 3 sub folders pages , widgets and bloc
 
+
+
 import 'package:blog_app/core/common/cubits/auth_cubit/auth_current_user_cubit.dart';
 import 'package:blog_app/core/common/cubits/blog_image_cubit/cubit/blog_image_cubit.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/login_page.dart';
 import 'package:blog_app/features/blog/presentation/bloc/fetch_blog_bloc/fetch_blog_bloc.dart';
+import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc.dart/bloc/get_username_bloc.dart';
 import 'package:blog_app/features/blog/presentation/bloc/upload_blog_bloc/upload_blog_bloc.dart';
 import 'package:blog_app/features/blog/presentation/pages/blog_page.dart';
 import 'package:blog_app/init_dependecies.dart';
@@ -34,6 +37,9 @@ void main() async {
           ),
           BlocProvider(
             create: (_) => serviceLocator<BlogBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => serviceLocator<GetUsernameBloc>(),
           ),
         ],
         child: const MyApp(),
@@ -67,15 +73,11 @@ class _MyAppState extends State<MyApp> {
             if (snapshot.connectionState == ConnectionState.active) {
               final User? user = snapshot.data;
 
-              if (user == null) {
-                // User is NOT logged in
-                return const LoginPage();
-              } else {
-                // User IS logged in
+              if (user != null) {
                 return const BlogPage();
               }
             }
-            return Container();
+            return const LoginPage();
           },
         ));
   }

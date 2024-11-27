@@ -4,7 +4,6 @@ import 'package:blog_app/features/auth/data/repository/firestore_auth_repoositor
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class AuthRemoteDatasource {
-  
   Future<UserModel> signUpWithEmailPassword({
     required String name,
     required String email,
@@ -15,6 +14,8 @@ abstract interface class AuthRemoteDatasource {
     required String email,
     required String password,
   });
+
+  Future<void> logUserOut();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
@@ -26,11 +27,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
   });
 
   @override
-  Future<UserModel> logInWithEmailPassword(
-      {required String email, required String password}) async {
+  Future<UserModel> logInWithEmailPassword({
+    required String email,
+    required String password,
+  }) async {
     try {
       final response = await firebaseAuthClient.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       if (response.user == null) {
         throw const ServerException(message: 'User is null');
       }
@@ -90,6 +95,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
       return userModel;
     } catch (e) {
       throw ServerException(message: e.toString());
+    }
+  }
+
+  @override
+  Future<void> logUserOut() async {
+    try {
+      await firebaseAuthClient.signOut();
+      return;
+    } catch (err) {
+      throw ServerException(message: err.toString());
     }
   }
 }

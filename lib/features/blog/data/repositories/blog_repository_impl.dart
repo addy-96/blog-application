@@ -75,4 +75,13 @@ class BlogRepositoryImpl implements BlogReppsitory {
       return left(Failure(message: err.toString()));
     }
   }
+
+  @override
+  Either<Failure, Future<String>> getUserName(String userId) {
+    try {
+      return right(blogRemoteDataSource.getUserName(userId));
+    } catch (err) {
+     return left(Failure(message: err.toString()));
+    }
+  }
 }

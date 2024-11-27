@@ -27,20 +27,24 @@ and thats how dependecyinjection works
 */
 
 import 'package:blog_app/core/common/cubits/auth_cubit/auth_current_user_cubit.dart';
+import 'package:blog_app/core/internet_checker.dart';
 import 'package:blog_app/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog_app/features/auth/data/datasources/firestore_auth_remote_datasource.dart';
 import 'package:blog_app/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:blog_app/features/auth/data/repository/firestore_auth_repoository_impl.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_login.dart';
+import 'package:blog_app/features/auth/domain/usecases/user_logout.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/blog/data/datsources/blog_remote_data_source.dart';
 import 'package:blog_app/features/blog/data/repositories/blog_repository_impl.dart';
 import 'package:blog_app/features/blog/domain/repositories/blog_reppsitory.dart';
 import 'package:blog_app/features/blog/domain/usecases/fetch_blog.dart';
+import 'package:blog_app/features/blog/domain/usecases/get_username.dart';
 import 'package:blog_app/features/blog/domain/usecases/upload_blog.dart';
 import 'package:blog_app/features/blog/presentation/bloc/fetch_blog_bloc/fetch_blog_bloc.dart';
+import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc.dart/bloc/get_username_bloc.dart';
 import 'package:blog_app/features/blog/presentation/bloc/upload_blog_bloc/upload_blog_bloc.dart';
 import 'package:blog_app/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -48,122 +52,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-final serviceLocator = GetIt.instance; //step 1 declare get_it inctance
-
-Future<void> initDependencies() async {
-  // this func is called in main
-  _authInit();
-  _initblog();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  serviceLocator.registerLazySingleton(
-    // service locator for firebaseAuth inctance
-    () => FirebaseAuth.instance,
-  );
-
-  serviceLocator.registerLazySingleton(
-    () => FirebaseFirestore.instance,
-  );
-
-  serviceLocator.registerLazySingleton(
-    () => FirebaseStorage.instance,
-  );
-
-  //core
-  serviceLocator.registerLazySingleton(
-    () => AuthCurrentUserCubit(),
-  );
-}
-
-void _authInit() {
-  serviceLocator.registerFactory<AuthRemoteDatasource>(
-    () => AuthRemoteDataSourceImpl(
-      firebaseAuthClient: serviceLocator(),
-      firestoreAuthRepoositoryImpl: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory<AuthRepository>(
-    () => AuthRepositoryImpl(
-      authRemoteDatasource: serviceLocator(),
-      firestoreAuthRemoteDatasource: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory(
-    () => UserSignUp(
-      authRepository: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory(
-    () => UserLogin(
-      authRepository: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerLazySingleton(
-    () => AuthBloc(
-      userSignUp: serviceLocator(),
-      userLogin: UserLogin(
-        authRepository: serviceLocator(),
-      ),
-      authCurrentUserCubit: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory(
-    () => FirestoreAuthRepoositoryImpl(
-      firestoreAuthRemoteDatasource: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory<FirestoreAuthRemoteDatasource>(
-    () => FirestoreeAuthRemoteDtaSourceImpl(
-      firestore: serviceLocator(),
-    ),
-  );
-}
-
-void _initblog() {
-  serviceLocator.registerFactory<BlogRemoteDataSource>(
-    () => BlogRemoteDataSourceImpl(
-      firestore: serviceLocator(),
-      fireStorage: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory<BlogReppsitory>(
-    () => BlogRepositoryImpl(
-      blogRemoteDataSource: serviceLocator(),
-      auth: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory(
-    () => UploadBlog(
-      blogReppsitory: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerLazySingleton(
-    () => BlogBloc(
-      uploadBlog: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory(
-    () => FetchBlog(
-      blogReppsitory: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory(
-    () => FetchBlogBloc(
-      fetchBlog: serviceLocator(),
-    ),
-  );
-}
+part 'init_dependency_main.dart';

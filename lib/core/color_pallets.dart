@@ -9,7 +9,6 @@ class ColorPallets {
     Color(0xFF00FF9C),
     Color(0xFFF3C623),
     Color(0xFF37AFE1),
-    Color(0xFF72BF78),
     Color(0xFF8B5DFF),
     Color(0xFF0D7C66),
     Color(0xFFFF8225),

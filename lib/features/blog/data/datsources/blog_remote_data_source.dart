@@ -12,6 +12,8 @@ abstract interface class BlogRemoteDataSource {
   Future<String?> uploadBlogImage(File image, String uniqueId);
 
   Future<List<BlogModel>> fetchBlog();
+
+  Future<String> getUserName(String userId);
 }
 
 class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
@@ -93,6 +95,16 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
       throw ServerException(
         message: err.toString(),
       );
+    }
+  }
+
+  @override
+  Future<String> getUserName(String userId) async {
+    try {
+      final response = await firestore.collection('users').doc(userId).get();
+      return response['username'];
+    } catch (err) {
+      throw ServerException(message: err.toString());
     }
   }
 }

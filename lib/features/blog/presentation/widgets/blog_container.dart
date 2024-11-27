@@ -1,22 +1,40 @@
 import 'dart:math';
 import 'package:blog_app/core/color_pallets.dart';
+import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/text_look.dart';
 import 'package:blog_app/core/utils/calculate_blog_reading_time.dart';
+import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc.dart/bloc/get_username_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class BlogContainer extends StatelessWidget {
+class BlogContainer extends StatefulWidget {
   const BlogContainer(
       {super.key,
       required this.selectedTopics,
       required this.blogTitle,
       required this.date,
-      required this.blogContentWordCount});
+      required this.blogContentWordCount,
+      required this.userId});
 
   final List<String> selectedTopics;
   final String blogTitle;
   final DateTime date;
   final int blogContentWordCount;
+  final String userId;
+
+  @override
+  State<BlogContainer> createState() => _BlogContainerState();
+}
+
+class _BlogContainerState extends State<BlogContainer> {
+  @override
+  void initState() {
+    super.initState();
+    context
+        .read<GetUsernameBloc>()
+        .add(UsernameRequested(userID: widget.userId));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +54,29 @@ class BlogContainer extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'User11111',
-                    style: TextLook()
-                        .normalText(18, ColorPallets.dark)
-                        .copyWith(fontWeight: FontWeight.bold),
+                  BlocBuilder<GetUsernameBloc, GetUsernameState>(
+                    builder: (context, state) {
+                      if (state is GetUsernameSuccess) {
+                        return FutureBuilder(
+                          future: state.username,
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const Loader(color: ColorPallets.light);
+                            }
+                            if (snapshot.hasData) {
+                              return Text(
+                                snapshot.data ?? 'User',
+                                style: TextLook()
+                                    .normalText(18, ColorPallets.dark)
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              );
+                            }
+                            return Container();
+                          },
+                        );
+                      }
+                      return Container();
+                    },
                   ),
                   const SizedBox(width: 30),
                   Material(
@@ -72,7 +108,7 @@ class BlogContainer extends StatelessWidget {
                           shadowColor: Colors.transparent,
                           child: Row(
                             children: [
-                              for (var item in selectedTopics)
+                              for (var item in widget.selectedTopics)
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Material(
@@ -103,24 +139,18 @@ class BlogContainer extends StatelessWidget {
                 ),
               ),
               Text(
-                blogTitle,
+                widget.blogTitle,
                 textAlign: TextAlign.start,
                 style: TextLook()
                     .normalText(15, ColorPallets.dark)
-                    .copyWith(fontWeight: FontWeight.w500, height: 2),
+                    .copyWith(fontWeight: FontWeight.bold, height: 2),
               ),
               const Gap(5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${calculateBlogReadingTime(blogContentWordCount).toString()} min',
-                    style: TextLook()
-                        .normalText(15, ColorPallets.dark)
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    '${date.day} / ${date.month} / ${date.year}',
+                    '${calculateBlogReadingTime(widget.blogContentWordCount).toString()} min',
                     style: TextLook()
                         .normalText(15, ColorPallets.dark)
                         .copyWith(fontWeight: FontWeight.bold),

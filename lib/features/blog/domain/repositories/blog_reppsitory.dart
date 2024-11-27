@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:blog_app/core/errors/failure.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:fpdart/fpdart.dart';
@@ -14,4 +13,6 @@ abstract interface class BlogReppsitory {
   );
 
   Either<Failure, Future<List<Blog>>> fetchBlog();
+
+  Either<Failure, Future<String>> getUserName(String userID);
 }

@@ -160,7 +160,6 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                   const Gap(20),
                   TextField(
                     controller: contentController,
-                    maxLength: 50,
                     maxLines: 10,
                     style: TextLook().normalText(15, ColorPallets.light),
                     decoration: InputDecoration(
