@@ -1,8 +1,6 @@
 import 'package:blog_app/core/color_pallets.dart';
 import 'package:blog_app/core/text_look.dart';
-import 'package:blog_app/core/utils/show_snacbar.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:blog_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

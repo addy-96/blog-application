@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:blog_app/core/errors/failure.dart';
 import 'package:blog_app/core/usecase/usecase.dart';
@@ -13,7 +12,6 @@ class FetchBlog implements Usecase<Future<List<Blog>>, BlogParams> {
 
   @override
   Future<Either<Failure, Future<List<Blog>>>> call(BlogParams params) async {
-    log('inside usecase');
     return blogReppsitory.fetchBlog();
   }
 }

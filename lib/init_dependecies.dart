@@ -42,9 +42,11 @@ import 'package:blog_app/features/blog/data/repositories/blog_repository_impl.da
 import 'package:blog_app/features/blog/domain/repositories/blog_reppsitory.dart';
 import 'package:blog_app/features/blog/domain/usecases/fetch_blog.dart';
 import 'package:blog_app/features/blog/domain/usecases/get_username.dart';
+import 'package:blog_app/features/blog/domain/usecases/save_blog.dart';
 import 'package:blog_app/features/blog/domain/usecases/upload_blog.dart';
 import 'package:blog_app/features/blog/presentation/bloc/fetch_blog_bloc/fetch_blog_bloc.dart';
-import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc.dart/bloc/get_username_bloc.dart';
+import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc/bloc/get_username_bloc.dart';
+import 'package:blog_app/features/blog/presentation/bloc/save_blog_bloc/save_blog_bloc.dart';
 import 'package:blog_app/features/blog/presentation/bloc/upload_blog_bloc/upload_blog_bloc.dart';
 import 'package:blog_app/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -53,5 +55,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'init_dependency_main.dart';

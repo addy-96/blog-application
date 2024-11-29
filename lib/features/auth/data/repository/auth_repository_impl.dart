@@ -1,5 +1,4 @@
 import 'package:blog_app/core/errors/failure.dart';
-import 'package:blog_app/core/errors/server_exception.dart';
 import 'package:blog_app/core/internet_checker.dart';
 import 'package:blog_app/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog_app/features/auth/data/datasources/firestore_auth_remote_datasource.dart';

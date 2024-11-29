@@ -25,20 +25,21 @@ class FirestoreeAuthRemoteDtaSourceImpl
     required Map<String, dynamic> userData,
     required String userId,
   }) async {
+
+
+    
     await firestore.collection('users').doc(userId).set({
       'username': userData['username'],
       'userId': userId,
       'createdAt': FieldValue.serverTimestamp(),
+      'userEmail': userData['userEmail'],
+      'userAppData': {'savedPost': <String>[]}
     });
   }
 
   @override
   Future<UserModel> getUserData({required String userID}) async {
     final response = await firestore.collection('users').doc(userID).get();
-
-    log(
-      response.data()!['username'].toString(),
-    );
 
     final username = response.data()!['username'];
     final userEmail = response.data()!['userEmail'];

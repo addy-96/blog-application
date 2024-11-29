@@ -3,7 +3,7 @@ import 'package:blog_app/core/text_look.dart';
 import 'package:blog_app/core/utils/calculate_blog_reading_time.dart';
 import 'package:blog_app/core/utils/get_formated_date.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
-import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc.dart/bloc/get_username_bloc.dart';
+import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc/bloc/get_username_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -72,10 +72,28 @@ class _BlogDetailsState extends State<BlogDetails> {
                         return Container();
                       },
                     ),
+                    const Gap(20),
+                    widget.blog.blogImageUrl != ''
+                        ? Container(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                fit: BoxFit.cover,
+                                widget.blog.blogImageUrl,
+                              ),
+                            ),
+                          )
+                        : const SizedBox(),
+                    const Gap(20),
                     Text(
-                      '${getFormattedDatedMMMyyyy(widget.blog.updatedAt)}' +
-                          ' , '
-                              '${calculateBlogReadingTime(widget.blog.blogContent.length)} min',
+                      '${getFormattedDatedMMMyyyy(widget.blog.updatedAt)}'
+                      ' , '
+                      '${calculateBlogReadingTime(widget.blog.blogContent.length)} min',
                       style: TextLook().normalText(15, ColorPallets.light),
                     ),
                   ],

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:blog_app/core/errors/failure.dart';
@@ -66,7 +65,6 @@ class BlogRepositoryImpl implements BlogReppsitory {
 
   @override
   Either<Failure, Future<List<Blog>>> fetchBlog() {
-    log('inside fetch blog repo ....');
     try {
       final result = blogRemoteDataSource.fetchBlog();
 
@@ -81,7 +79,26 @@ class BlogRepositoryImpl implements BlogReppsitory {
     try {
       return right(blogRemoteDataSource.getUserName(userId));
     } catch (err) {
-     return left(Failure(message: err.toString()));
+      return left(Failure(message: err.toString()));
     }
   }
+
+  @override
+  Either<Failure, Future<void>> saveBlog(String blogId) {
+    try {
+      return right(blogRemoteDataSource.saveOrUnsaveBlog(blogId));
+    } catch (err) {
+      return left(Failure(message: err.toString()));
+    }
+  }
+
+  @override
+  Either<Failure, Future<void>> getSavedBlogs(String userID) {
+    try {
+      return right(blogRemoteDataSource.getSavedBlog(userID));
+    } catch (err) {
+      return left(Failure(message: err.toString()));
+    }
+  }
+
 }

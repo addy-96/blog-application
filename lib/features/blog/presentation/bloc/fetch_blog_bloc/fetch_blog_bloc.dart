@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/domain/usecases/fetch_blog.dart';
@@ -20,7 +19,6 @@ class FetchBlogBloc extends Bloc<FetchBlogEvent, FetchBlogState> {
     Emitter<FetchBlogState> emit,
   ) async {
     emit(FetchBlogLoading());
-    log('inside fetchblog');
     final res = await fetchBlog.call(BlogParams());
 
     res.fold(

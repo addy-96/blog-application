@@ -32,8 +32,8 @@ class _BlogPageState extends State<BlogPage> {
       backgroundColor: ColorPallets.dark,
       appBar: AppBar(
         backgroundColor: ColorPallets.dark,
-        title:
-            Text('Blogs', style: TextLook().normalText(32, ColorPallets.light)),
+        title: Text('Blogs',
+            style: TextLook().normalText(32, ColorPallets.light)),
         actions: const [
           CustomPopUpMenu(),
         ],
@@ -74,7 +74,6 @@ class _BlogPageState extends State<BlogPage> {
                           final wordCount = snapshot.data![index].blogContent
                               .split(RegExp(r'\s+'))
                               .length; // counting the words in the content
-
                           return InkWell(
                             radius: 10,
                             borderRadius: BorderRadius.circular(10),
@@ -90,6 +89,7 @@ class _BlogPageState extends State<BlogPage> {
                               date: snapshot.data![index].updatedAt,
                               blogContentWordCount: wordCount,
                               userId: snapshot.data![index].uploaderId,
+                              blogId: snapshot.data![index].blogId,
                             ),
                           );
                         },

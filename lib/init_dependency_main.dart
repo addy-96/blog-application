@@ -6,6 +6,9 @@ Future<void> initDependencies() async {
   // this func is called in main
   _authInit();
   _initblog();
+
+  final sharedPreferences = await SharedPreferences.getInstance();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -27,12 +30,20 @@ Future<void> initDependencies() async {
     () => InternetConnectionChecker(),
   );
 
+  serviceLocator.registerFactory(
+    () => Supabase.instance,
+  );
+
   //core
   serviceLocator.registerLazySingleton(
     () => AuthCurrentUserCubit(),
   );
   serviceLocator.registerFactory<InternetChecker>(
     () => InternetCheckerImpl(internetConnectionChecker: serviceLocator()),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => sharedPreferences,
   );
 }
 
@@ -41,6 +52,8 @@ void _authInit() {
     () => AuthRemoteDataSourceImpl(
       firebaseAuthClient: serviceLocator(),
       firestoreAuthRepoositoryImpl: serviceLocator(),
+      sharedPref: serviceLocator(),
+      blogRemoteDataSource: serviceLocator(),
     ),
   );
 
@@ -52,6 +65,7 @@ void _authInit() {
     ),
   );
 
+//usecases
   serviceLocator.registerFactory(
     () => UserSignUp(
       authRepository: serviceLocator(),
@@ -67,6 +81,12 @@ void _authInit() {
   serviceLocator.registerFactory(
     () => UserLogout(
       authRepository: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => SaveBlog(
+      blogReppsitory: serviceLocator(),
     ),
   );
 
@@ -99,6 +119,9 @@ void _initblog() {
     () => BlogRemoteDataSourceImpl(
       firestore: serviceLocator(),
       fireStorage: serviceLocator(),
+      supabase: serviceLocator(),
+      firebaseAuth: serviceLocator(),
+      sharedPref: serviceLocator(),
     ),
   );
 
@@ -142,6 +165,12 @@ void _initblog() {
   serviceLocator.registerFactory(
     () => GetUsernameBloc(
       getUsername: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => SaveBlogBloc(
+      saveBlog: serviceLocator(),
     ),
   );
 }
