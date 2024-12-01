@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:blog_app/core/color_pallets.dart';
 import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/text_look.dart';
@@ -32,8 +33,10 @@ class _BlogPageState extends State<BlogPage> {
       backgroundColor: ColorPallets.dark,
       appBar: AppBar(
         backgroundColor: ColorPallets.dark,
-        title: Text('Blogs',
-            style: TextLook().normalText(32, ColorPallets.light)),
+        title: Text(
+          'Blogs',
+          style: TextLook().normalText(32, ColorPallets.light),
+        ),
         actions: const [
           CustomPopUpMenu(),
         ],

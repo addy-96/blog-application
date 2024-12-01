@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:blog_app/core/errors/failure.dart';
@@ -23,6 +22,7 @@ abstract interface class BlogRemoteDataSource {
 
   Future<void> getSavedBlog(String userId);
 
+  Future<List<BlogModel>> displaySavedBlogs();
 }
 
 class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
@@ -181,4 +181,41 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
     }
   }
 
+  @override
+  Future<List<BlogModel>> displaySavedBlogs() async {
+    try {
+      final blogIdList = sharedPref.getStringList('savedBlogs') ?? [];
+
+      final List<BlogModel> blogs = [];
+
+      for (var blogId in blogIdList) {
+        final response = await firestore
+            .collection('blogs')
+            .where('blogId', isEqualTo: blogId)
+            .get();
+
+        for (var item in response.docs) {
+          final List<String> selectedTopics = [];
+
+          for (var topics in item['blogTopics']) {
+            selectedTopics.add(topics as String);
+          }
+
+          final blog = BlogModel(
+              blogId: blogId,
+              blogTitle: item['blogTitle'],
+              blogContent: item['blogContent'],
+              blogImageUrl: item['imageUrl'],
+              blogTopics: selectedTopics,
+              updatedAt: item['uploadedAt'].toDate(),
+              uploaderId: item['uploaderID']);
+
+          blogs.add(blog);
+        }
+      }
+      return blogs;
+    } on ServerException catch (err) {
+      throw ServerException(message: err.message);
+    }
+  }
 }

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:blog_app/core/color_pallets.dart';
 import 'package:blog_app/features/blog/presentation/bloc/save_blog_bloc/save_blog_bloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,12 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SaveButton extends StatefulWidget {
-  const SaveButton({
+  SaveButton({
     super.key,
     required this.blogId,
   });
 
   final String blogId;
+
 
   @override
   State<SaveButton> createState() => _SaveButtonState();

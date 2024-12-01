@@ -101,4 +101,12 @@ class BlogRepositoryImpl implements BlogReppsitory {
     }
   }
 
+  @override
+  Future<Either<Failure, List<BlogModel>>> displaySavedBlogs() async {
+    try {
+      return right(await blogRemoteDataSource.displaySavedBlogs());
+    } catch (err) {
+      return left(Failure(message: err.toString()));
+    }
+  }
 }

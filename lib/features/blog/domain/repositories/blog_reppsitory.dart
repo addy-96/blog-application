@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:blog_app/core/errors/failure.dart';
+import 'package:blog_app/features/blog/data/models/blog_model.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -20,4 +21,5 @@ abstract interface class BlogReppsitory {
 
   Either<Failure, Future<void>> getSavedBlogs(String userID);
 
+  Future<Either<Failure, List<BlogModel>>> displaySavedBlogs();
 }

@@ -90,6 +90,14 @@ void _authInit() {
     ),
   );
 
+  serviceLocator.registerFactory(
+    () => DisplaySavedBlogs(
+      blogReppsitory: serviceLocator(),
+    ),
+  );
+
+  //bloc
+
   serviceLocator.registerLazySingleton(
     () => AuthBloc(
       userLogout: serviceLocator(),
@@ -171,6 +179,12 @@ void _initblog() {
   serviceLocator.registerFactory(
     () => SaveBlogBloc(
       saveBlog: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => DisplaySavedBlogsBloc(
+      displaySavedBlogs: serviceLocator(),
     ),
   );
 }

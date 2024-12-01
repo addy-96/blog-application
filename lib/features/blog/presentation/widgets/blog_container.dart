@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:blog_app/core/color_pallets.dart';
 import 'package:blog_app/core/text_look.dart';
 import 'package:blog_app/core/utils/calculate_blog_reading_time.dart';
-import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc/bloc/get_username_bloc.dart';
+import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc/get_username_bloc.dart';
 import 'package:blog_app/features/blog/presentation/widgets/save_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
