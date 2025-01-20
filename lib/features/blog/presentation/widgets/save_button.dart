@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SaveButton extends StatefulWidget {
-  SaveButton({
+  const SaveButton({
     super.key,
     required this.blogId,
   });

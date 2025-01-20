@@ -82,12 +82,13 @@ class _SavedBlogsState extends State<SavedBlogs> {
                       ));
                     },
                     child: BlogContainer(
-                        selectedTopics: blog.blogTopics,
-                        blogTitle: blog.blogTitle,
-                        date: blog.updatedAt,
-                        blogContentWordCount: wordCount,
-                        userId: blog.uploaderId,
-                        blogId: blog.blogId),
+                      selectedTopics: blog.blogTopics,
+                      blogTitle: blog.blogTitle,
+                      date: blog.updatedAt,
+                      blogContentWordCount: wordCount,
+                      userId: blog.uploaderId,
+                      blogId: blog.blogId,
+                    ),
                   );
                 },
               );

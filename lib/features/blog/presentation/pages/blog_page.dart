@@ -10,6 +10,7 @@ import 'package:blog_app/features/blog/presentation/pages/add_new_blog_page.dart
 import 'package:blog_app/features/blog/presentation/pages/blog_details.dart';
 import 'package:blog_app/features/blog/presentation/widgets/blog_container.dart';
 import 'package:blog_app/features/blog/presentation/widgets/pop_up_menu.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -81,18 +82,22 @@ class _BlogPageState extends State<BlogPage> {
                             radius: 10,
                             borderRadius: BorderRadius.circular(10),
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
                                   builder: (ctx) => BlogDetails(
-                                      blog: snapshot.data![index])));
+                                    blog: snapshot.data![index],
+                                  ),
+                                ),
+                              );
                             },
                             enableFeedback: true,
                             child: BlogContainer(
                               selectedTopics: snapshot.data![index].blogTopics,
                               blogTitle: snapshot.data![index].blogTitle,
-                              date: snapshot.data![index].updatedAt,
                               blogContentWordCount: wordCount,
                               userId: snapshot.data![index].uploaderId,
                               blogId: snapshot.data![index].blogId,
+                      
                             ),
                           );
                         },
@@ -116,14 +121,14 @@ class _BlogPageState extends State<BlogPage> {
             ),
           );
         },
-        child: Text(
-          '+',
-          style: TextLook().normalText(
-            40,
-            ColorPallets.dark,
-          ),
+        child: const Icon(
+          CupertinoIcons.pencil_outline,
+          size: 40,
         ),
       ),
     );
   }
 }
+
+
+/*  */

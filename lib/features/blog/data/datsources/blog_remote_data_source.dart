@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:blog_app/core/errors/failure.dart';
@@ -23,6 +24,8 @@ abstract interface class BlogRemoteDataSource {
   Future<void> getSavedBlog(String userId);
 
   Future<List<BlogModel>> displaySavedBlogs();
+
+  Future<bool> deleteBlog(String blogID);
 }
 
 class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
@@ -41,11 +44,13 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
 
   @override
   Future<void> uploadBlog(BlogModel blog) async {
-    final ref = firestore.collection('blogs').doc();
+    final blogsRef = firestore.collection('blogs').doc();
+    final userID = firebaseAuth.currentUser!.uid;
+    final userRef = firestore.collection('users').doc(userID);
 
     try {
-      await ref.set({
-        'blogId': ref.id,
+      await blogsRef.set({
+        'blogId': blogsRef.id,
         'blogTitle': blog.blogTitle,
         'blogContent': blog.blogContent,
         'imageUrl': blog.blogImageUrl,
@@ -53,6 +58,15 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
         'uploadedAt': Timestamp.fromDate(blog.updatedAt),
         'uploaderID': blog.uploaderId
       });
+
+//update uploaded blogid list in user collection
+      await userRef.update(
+        {
+          'userAppData.uploadedPost': FieldValue.arrayUnion(
+            [blogsRef.id],
+          ),
+        },
+      );
     } catch (err) {
       Failure(message: err.toString());
     }
@@ -215,6 +229,38 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
       }
       return blogs;
     } on ServerException catch (err) {
+      throw ServerException(message: err.message);
+    }
+  }
+
+  @override
+  Future<bool> deleteBlog(String blogID) async {
+    try {
+      final ref = firestore.collection('blogs').doc(blogID);
+      final res = await ref.get();
+
+      if (res.data()!['imageUrl'] == "") {
+        await ref.delete();
+        return true;
+      }
+
+      final imageUrl = res.data()!['imageUrl'];
+
+      final Uri uri = Uri.parse(imageUrl);
+      final path = uri.pathSegments.sublist(4).join('/');
+
+      log('path $path');
+
+      final response =
+          await supabase.client.storage.from('blog-app').remove([path]);
+
+      log(response.length.toString());
+      log('image deleted succesfully.......');
+
+      await ref.delete();
+      return true;
+    } on ServerException catch (err) {
+      log(err.toString());
       throw ServerException(message: err.message);
     }
   }

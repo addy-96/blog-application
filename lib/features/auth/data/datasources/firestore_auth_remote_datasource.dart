@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:blog_app/features/auth/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -25,15 +23,15 @@ class FirestoreeAuthRemoteDtaSourceImpl
     required Map<String, dynamic> userData,
     required String userId,
   }) async {
-
-
-    
     await firestore.collection('users').doc(userId).set({
       'username': userData['username'],
       'userId': userId,
       'createdAt': FieldValue.serverTimestamp(),
       'userEmail': userData['userEmail'],
-      'userAppData': {'savedPost': <String>[]}
+      'userAppData': {
+        'savedPost': <String>[],
+        'uploadedPost': <String>[],
+      }
     });
   }
 

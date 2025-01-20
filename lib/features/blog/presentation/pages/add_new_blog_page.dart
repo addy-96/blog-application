@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+
 import 'package:blog_app/core/color_pallets.dart';
 import 'package:blog_app/core/common/cubits/blog_image_cubit/cubit/blog_image_cubit.dart';
 import 'package:blog_app/core/common/widgets/loader.dart';
@@ -22,15 +23,23 @@ class AddNewBlogPage extends StatefulWidget {
 }
 
 class _AddNewBlogPageState extends State<AddNewBlogPage> {
+  final Color color = ColorPallets
+      .postColor[Random().nextInt(ColorPallets.postColor.length - 1)];
   File? selectedImage;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   final List<String> selectedTopics = [];
 
   bool validateInput() {
+    if (titleController.text.trim().isEmpty &&
+        contentController.text.trim().isEmpty) {
+      showSnackbar(context, 'Can\'t share empty Blog ! ');
+      return false;
+    }
+
     if (titleController.text.trim().isEmpty ||
-        titleController.text.length <= 4) {
-      showSnackbar(context, 'The title must be atleast 8 characters ');
+        titleController.text.length <= 6) {
+      showSnackbar(context, 'The title must be atleast 6 characters ');
       return false;
     }
     if (selectedTopics.isEmpty) {
@@ -72,7 +81,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
         }
 
         if (state is BlogSuccess) {
-          Navigator.of(context).push(
+          Navigator.of(context).pop(
             MaterialPageRoute(
               builder: (ctx) => const BlogPage(),
             ),
@@ -92,6 +101,16 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
           appBar: AppBar(
             foregroundColor: ColorPallets.light,
             backgroundColor: ColorPallets.dark,
+            leading: IconButton(
+              onPressed: () async {
+                context.read<BlogImageCubit>().resetImage();
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: ColorPallets.light,
+              ),
+            ),
             actions: [
               IconButton(
                 onPressed: onUploadBlog,
@@ -108,14 +127,15 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: [
-                  const ImageContainer(),
                   const Gap(20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Tags',
-                        style: TextLook().normalText(15, ColorPallets.light),
+                        style: TextLook()
+                            .normalText(19, color)
+                            .copyWith(fontWeight: FontWeight.bold),
                       ),
                       const Gap(5),
                       SingleChildScrollView(
@@ -141,41 +161,46 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                   TextField(
                     controller: titleController,
                     maxLength: 50,
-                    style: TextLook().normalText(15, ColorPallets.light),
+                    style: TextLook().normalText(18, ColorPallets.light),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(18),
                       labelText: 'Title',
-                      labelStyle: TextLook().normalText(15, ColorPallets.light),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(
-                          width: 10,
-                          color: Colors.grey.withOpacity(
-                            0.5,
-                          ),
-                        ),
-                      ),
+                      labelStyle: TextLook()
+                          .normalText(18, ColorPallets.light.withOpacity(0.5)),
+                      border: InputBorder.none,
                     ),
                   ),
-                  const Gap(20),
-                  TextField(
-                    controller: contentController,
-                    maxLines: 10,
-                    style: TextLook().normalText(15, ColorPallets.light),
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(18),
-                      hintText: 'Body',
-                      hintStyle: TextLook().normalText(15, ColorPallets.light),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(
-                          width: 10,
-                          color: Colors.grey.withOpacity(
-                            0.5,
+                  ImageContainer(
+                    color: color,
+                  ),
+                  const Gap(10),
+                  Column(
+                    children: [
+                      TextField(
+                        controller: contentController,
+                        maxLines: 10,
+                        style: TextLook().normalText(18, ColorPallets.light),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(18),
+                          hintText: 'What\'s happening ?',
+                          hintStyle: TextLook().normalText(
+                              18, ColorPallets.light.withOpacity(0.5)),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(width: 3, color: color),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              width: 10,
+                              color: Colors.grey.withOpacity(
+                                1,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                   const Gap(20),
                 ],

@@ -1,21 +1,22 @@
 import 'dart:math';
 
 import 'package:blog_app/core/color_pallets.dart';
+import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/text_look.dart';
 import 'package:blog_app/core/utils/calculate_blog_reading_time.dart';
-import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc/get_username_bloc.dart';
+import 'package:blog_app/features/blog/presentation/widgets/delete_button.dart';
 import 'package:blog_app/features/blog/presentation/widgets/save_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:shimmer/shimmer.dart';
 
 class BlogContainer extends StatefulWidget {
   const BlogContainer({
     super.key,
     required this.selectedTopics,
     required this.blogTitle,
-    required this.date,
+    this.date,
     required this.blogContentWordCount,
     required this.userId,
     required this.blogId,
@@ -23,7 +24,7 @@ class BlogContainer extends StatefulWidget {
 
   final List<String> selectedTopics;
   final String blogTitle;
-  final DateTime date;
+  final DateTime? date;
   final int blogContentWordCount;
   final String userId;
   final String blogId;
@@ -33,12 +34,12 @@ class BlogContainer extends StatefulWidget {
 }
 
 class _BlogContainerState extends State<BlogContainer> {
-  @override
-  void initState() {
-    super.initState();
-    context
-        .read<GetUsernameBloc>()
-        .add(UsernameRequested(userID: widget.userId));
+  Future<String> getUsername(String userID) async {
+    // this function should not be here this is a temporary solution for privious inconsistent username error , iwill try solvin it later using get username bloc.
+    final ref = FirebaseFirestore.instance.collection('users').doc(userID);
+    final response = await ref.get();
+    final username = response.data()!['username'];
+    return username;
   }
 
   @override
@@ -46,7 +47,7 @@ class _BlogContainerState extends State<BlogContainer> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width / 10,
         decoration: BoxDecoration(
           color: ColorPallets
               .postColor[Random().nextInt(ColorPallets.postColor.length - 1)],
@@ -59,40 +60,43 @@ class _BlogContainerState extends State<BlogContainer> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  BlocBuilder<GetUsernameBloc, GetUsernameState>(
-                    builder: (context, state) {
-                      if (state is GetUsernameSuccess) {
-                        return SizedBox(
-                          height: 30,
-                          child: FutureBuilder(
-                            future: state.username,
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return Shimmer.fromColors(
-                                    baseColor: Colors.grey[300]!,
-                                    highlightColor: Colors.grey[100]!,
-                                    child: Container(
-                                      color: Colors.blueGrey.withOpacity(0.5),
-                                    ));
-                              }
-                              if (snapshot.hasData) {
-                                return Text(
-                                  snapshot.data ?? 'User',
-                                  style: TextLook()
-                                      .normalText(18, ColorPallets.dark)
-                                      .copyWith(fontWeight: FontWeight.bold),
-                                );
-                              }
-                              return Container();
-                            },
-                          ),
-                        );
+                  FutureBuilder(
+                    future: getUsername(widget.userId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Loader(color: Colors.white);
                       }
-                      return Container();
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            snapshot.data!,
+                            style: TextLook()
+                                .normalText(
+                                  22,
+                                  ColorPallets.dark,
+                                )
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          );
+                        }
+                        if (!snapshot.hasData) {
+                          return const Text('Error!');
+                        }
+                      }
+                      return const Text('error..');
                     },
                   ),
                   const Gap(30),
-                  SaveButton(blogId: widget.blogId),
+                  Row(
+                    children: [
+                      FirebaseAuth.instance.currentUser!.uid == widget.userId
+                          ? DeleteButton(blogID: widget.blogId)
+                          : Container(),
+                      Gap(10),
+                      SaveButton(blogId: widget.blogId),
+                    ],
+                  ),
                 ],
               ),
               const Gap(10),

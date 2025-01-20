@@ -19,8 +19,10 @@ class GetUsernameBloc extends Bloc<GetUsernameEvent, GetUsernameState> {
     final res = await getUsername.call(GetUserNameParams(userID: event.userID));
 
     res.fold(
-      (l) => emit(GetUsernameFailure()),
-      (r) => emit(GetUsernameSuccess(username: r)),
+      (l) => emit(GetUsernameFailure(errorMesssage: l.message)),
+      (r) {
+        emit(GetUsernameSuccess(username: r));
+      },
     );
   }
 }

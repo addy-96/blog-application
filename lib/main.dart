@@ -5,6 +5,7 @@ import 'package:blog_app/core/common/cubits/blog_image_cubit/cubit/blog_image_cu
 import 'package:blog_app/core/constant.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/login_page.dart';
+import 'package:blog_app/features/blog/presentation/bloc/delete_blog_bloc/delete_blog_bloc.dart';
 import 'package:blog_app/features/blog/presentation/bloc/display_saved_blogs_bloc/display_saved_blogs_bloc.dart';
 import 'package:blog_app/features/blog/presentation/bloc/fetch_blog_bloc/fetch_blog_bloc.dart';
 import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc/get_username_bloc.dart';
@@ -53,6 +54,12 @@ void main() async {
           BlocProvider(
             create: (_) => serviceLocator<DisplaySavedBlogsBloc>(),
           ),
+           BlocProvider(
+            create: (_) => serviceLocator<DisplaySavedBlogsBloc>(),
+          ),
+           BlocProvider(
+            create: (_) => serviceLocator<DeleteBlogBloc>(),
+          ),
         ],
         child: const MyApp(),
       ),
@@ -77,19 +84,20 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Blog App',
-        debugShowCheckedModeBanner: false,
-        home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.active) {
-              final User? user = snapshot.data;
-              if (user != null) {
-                return const BlogPage();
-              }
+      title: 'Blog App',
+      debugShowCheckedModeBanner: false,
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            final User? user = snapshot.data;
+            if (user != null) {
+              return const BlogPage();
             }
-            return const LoginPage();
-          },
-        ));
+          }
+          return const LoginPage();
+        },
+      ),
+    );
   }
 }

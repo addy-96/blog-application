@@ -11,7 +11,12 @@ final class GetUsernameSuccess extends GetUsernameState {
   GetUsernameSuccess({
     required this.username,
   });
-  final Future<String> username;
+  final String username;
 }
 
-final class GetUsernameFailure extends GetUsernameState {}
+final class GetUsernameFailure extends GetUsernameState {
+  final String errorMesssage;
+  GetUsernameFailure({
+    required this.errorMesssage,
+  });
+}

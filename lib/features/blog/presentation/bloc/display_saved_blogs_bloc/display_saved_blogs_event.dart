@@ -1,5 +1,5 @@
 part of 'display_saved_blogs_bloc.dart';
 
-class DisplaySavedBlogsEvent {}
+sealed class DisplaySavedBlogsEvent {}
 
-class DisplaySavedBlogsRequested extends DisplaySavedBlogsEvent{}
+final class DisplaySavedBlogsRequested extends DisplaySavedBlogsEvent{}

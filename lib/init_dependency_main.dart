@@ -26,8 +26,8 @@ Future<void> initDependencies() async {
     () => FirebaseStorage.instance,
   );
 
-  serviceLocator.registerFactory(
-    () => InternetConnectionChecker(),
+  serviceLocator.registerLazySingleton(
+    () => InternetConnectionChecker.createInstance(),
   );
 
   serviceLocator.registerFactory(
@@ -84,18 +84,6 @@ void _authInit() {
     ),
   );
 
-  serviceLocator.registerFactory(
-    () => SaveBlog(
-      blogReppsitory: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory(
-    () => DisplaySavedBlogs(
-      blogReppsitory: serviceLocator(),
-    ),
-  );
-
   //bloc
 
   serviceLocator.registerLazySingleton(
@@ -130,6 +118,18 @@ void _initblog() {
       supabase: serviceLocator(),
       firebaseAuth: serviceLocator(),
       sharedPref: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => SaveBlog(
+      blogReppsitory: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => DisplaySavedBlogs(
+      blogReppsitory: serviceLocator(),
     ),
   );
 
@@ -185,6 +185,18 @@ void _initblog() {
   serviceLocator.registerFactory(
     () => DisplaySavedBlogsBloc(
       displaySavedBlogs: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => DeleteBlog(
+      blogReppsitory: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => DeleteBlogBloc(
+      deleteBlog: serviceLocator(),
     ),
   );
 }

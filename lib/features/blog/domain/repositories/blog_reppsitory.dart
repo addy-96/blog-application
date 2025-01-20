@@ -15,11 +15,13 @@ abstract interface class BlogReppsitory {
 
   Either<Failure, Future<List<Blog>>> fetchBlog();
 
-  Either<Failure, Future<String>> getUserName(String userID);
+  Future<Either<Failure, String>> getUserName(String userID);
 
   Either<Failure, void> saveBlog(String blogId);
 
   Either<Failure, Future<void>> getSavedBlogs(String userID);
 
   Future<Either<Failure, List<BlogModel>>> displaySavedBlogs();
+
+  Future<Either<Failure, bool>> deleteBlogs(String blogID);
 }

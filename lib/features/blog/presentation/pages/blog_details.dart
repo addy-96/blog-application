@@ -4,6 +4,7 @@ import 'package:blog_app/core/utils/calculate_blog_reading_time.dart';
 import 'package:blog_app/core/utils/get_formated_date.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/presentation/bloc/get_username_bloc/get_username_bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -32,6 +33,15 @@ class _BlogDetailsState extends State<BlogDetails> {
       appBar: AppBar(
         backgroundColor: ColorPallets.dark,
         foregroundColor: ColorPallets.light,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            CupertinoIcons.left_chevron,
+            size: 35,
+          ),
+        ),
       ),
       backgroundColor: ColorPallets.dark,
       body: Padding(
@@ -55,18 +65,12 @@ class _BlogDetailsState extends State<BlogDetails> {
                     BlocBuilder<GetUsernameBloc, GetUsernameState>(
                       builder: (context, state) {
                         if (state is GetUsernameSuccess) {
-                          return FutureBuilder(
-                            future: state.username,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Text(
-                                  'by ${snapshot.requireData}',
-                                  style: TextLook()
-                                      .normalText(15, ColorPallets.light),
-                                );
-                              }
-                              return Container();
-                            },
+                          return Text(
+                            'by ${state.username}',
+                            style: TextLook().normalText(
+                              18,
+                              ColorPallets.light,
+                            ),
                           );
                         }
                         return Container();

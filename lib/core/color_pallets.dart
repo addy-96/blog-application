@@ -2,9 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+//Color(0xFF0B192C)
 class ColorPallets {
   static const light = Colors.white;
-  static const dark = Color(0xFF0B192C);
+  static const dark = Colors.black;
   static List postColor = const [
     Color(0xFF00FF9C),
     Color(0xFFF3C623),
@@ -14,7 +15,6 @@ class ColorPallets {
     Color(0xFFFF8225),
     Color(0xFF8B5DFF),
     Color(0xFFC3FF93),
-    Color(0xFFFF204E),
     Color(0xFF687EFF),
   ];
 

@@ -75,9 +75,9 @@ class BlogRepositoryImpl implements BlogReppsitory {
   }
 
   @override
-  Either<Failure, Future<String>> getUserName(String userId) {
+  Future<Either<Failure, String>> getUserName(String userId) async {
     try {
-      return right(blogRemoteDataSource.getUserName(userId));
+      return right(await blogRemoteDataSource.getUserName(userId));
     } catch (err) {
       return left(Failure(message: err.toString()));
     }
@@ -105,6 +105,15 @@ class BlogRepositoryImpl implements BlogReppsitory {
   Future<Either<Failure, List<BlogModel>>> displaySavedBlogs() async {
     try {
       return right(await blogRemoteDataSource.displaySavedBlogs());
+    } catch (err) {
+      return left(Failure(message: err.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteBlogs(String blogID) async {
+    try {
+      return right(await blogRemoteDataSource.deleteBlog(blogID));
     } catch (err) {
       return left(Failure(message: err.toString()));
     }
