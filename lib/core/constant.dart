@@ -1,3 +1,0 @@
-const supabaseProjectUrl = 'https://ldpcfbthutcnednqmpmu.supabase.co';
-const supabaseApiKey =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkcGNmYnRodXRjbmVkbnFtcG11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzNzM1NDYsImV4cCI6MjA2MTk0OTU0Nn0.kmikqLQmhPqOhX0X1cAFzkc7Y8IT62aM05meHIZnehs';
