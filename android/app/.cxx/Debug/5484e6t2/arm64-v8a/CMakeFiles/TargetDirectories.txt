@@ -1,0 +1,2 @@
+/home/aditya/Desktop/blog_app/android/app/.cxx/Debug/5484e6t2/arm64-v8a/CMakeFiles/edit_cache.dir
+/home/aditya/Desktop/blog_app/android/app/.cxx/Debug/5484e6t2/arm64-v8a/CMakeFiles/rebuild_cache.dir

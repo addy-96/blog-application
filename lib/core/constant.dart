@@ -1,3 +1,3 @@
-const supabaseProjectUrl = 'https://vzsqluqtryepxryuxnal.supabase.co';
+const supabaseProjectUrl = 'https://ldpcfbthutcnednqmpmu.supabase.co';
 const supabaseApiKey =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6c3FsdXF0cnllcHhyeXV4bmFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI3MDM1ODEsImV4cCI6MjA0ODI3OTU4MX0.WwiNagMYSOqz9QEQptwImwR54topEvb2VSEJ9-pCBnY';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkcGNmYnRodXRjbmVkbnFtcG11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzNzM1NDYsImV4cCI6MjA2MTk0OTU0Nn0.kmikqLQmhPqOhX0X1cAFzkc7Y8IT62aM05meHIZnehs';

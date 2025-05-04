@@ -54,10 +54,10 @@ void main() async {
           BlocProvider(
             create: (_) => serviceLocator<DisplaySavedBlogsBloc>(),
           ),
-           BlocProvider(
+          BlocProvider(
             create: (_) => serviceLocator<DisplaySavedBlogsBloc>(),
           ),
-           BlocProvider(
+          BlocProvider(
             create: (_) => serviceLocator<DeleteBlogBloc>(),
           ),
         ],

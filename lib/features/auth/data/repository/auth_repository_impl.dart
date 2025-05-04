@@ -1,8 +1,8 @@
+import 'package:blog_app/core/entities/user.dart';
 import 'package:blog_app/core/errors/failure.dart';
 import 'package:blog_app/core/internet_checker.dart';
 import 'package:blog_app/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog_app/features/auth/data/datasources/firestore_auth_remote_datasource.dart';
-import 'package:blog_app/core/entities/user.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fireauth;
 import 'package:fpdart/fpdart.dart';
@@ -43,10 +43,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, User>> signUpWithEmailPassword(
-      {required String name,
-      required String email,
-      required String password}) async {
+  Future<Either<Failure, User>> signUpWithEmailPassword({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
     if (!await (internetChecker.isConnected)) {
       return left(Failure(message: 'No Internet Connection !'));
     }
